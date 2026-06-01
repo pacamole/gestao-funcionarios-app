@@ -1,0 +1,72 @@
+import { useEffect, useState } from 'react';
+import { apiClient } from '../../api/apiClient';
+import './UsuariosScreen.css';
+
+// DTO
+export interface Usuario {
+    id: string,
+    email: string;
+    permissoes: string;
+}
+
+function UsuariosScreen() {
+    const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchUsuarios = async () => {
+            try {
+                // Chamamos o nosso wrapper passando a interface para garantir a tipagem
+                const data = await apiClient.get<Usuario[]>('/usuarios');
+                setUsuarios(data);
+            } catch (err) {
+                setError('Failed to fetch users.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchUsuarios();
+    }, []);
+
+    return (
+        <div className="container">
+            <header>
+                <h2>Usuários</h2>
+            </header>
+
+            <main>
+                <div className="table-container">
+                    {isLoading && (<p>Carregando usuários</p>)}
+
+                    {error && (<div>
+                        <h5>Ocorreu um erro na aplicação...</h5>
+                        <p>{error}</p>
+                    </div>)}
+
+                    {!isLoading && !error && (
+                        <table border={2}>
+                            <thead>
+                                <th>ID</th>
+                                <th>E-mail</th>
+                                <th>Permissões</th>
+                            </thead>
+                            <tbody>
+                                {usuarios.map(user => (
+                                    <tr key={user.id}>
+                                        <td>{user.id}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.permissoes}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+            </main>
+        </div>
+    )
+}
+
+export default UsuariosScreen;
