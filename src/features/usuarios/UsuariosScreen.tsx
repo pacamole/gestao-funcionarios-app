@@ -14,20 +14,20 @@ function UsuariosScreen() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchUsuarios = async () => {
-            try {
-                // Chamamos o nosso wrapper passando a interface para garantir a tipagem
-                const data = await apiClient.get<Usuario[]>('/usuarios');
-                setUsuarios(data);
-            } catch (err) {
-                setError('Failed to fetch users.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    async function fetchUsuarios() {
+        try {
+            // Chamamos o nosso wrapper passando a interface para garantir a tipagem
+            const data = await apiClient.get<Usuario[]>('/usuarios');
+            setUsuarios(data);
+        } catch (err) {
+            setError('Failed to fetch users.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-        fetchUsuarios();
+    useEffect(() => {
+        fetchUsuarios()
     }, []);
 
     return (
@@ -38,11 +38,11 @@ function UsuariosScreen() {
 
             <main>
                 <div className="table-container">
-                    {isLoading && (<p>Carregando usuários</p>)}
+                    {isLoading && (<p>Carregando usuários...</p>)}
 
-                    {error && (<div>
+                    {error && (<div style={{backgroundColor: "salmon"}}>
                         <h5>Ocorreu um erro na aplicação...</h5>
-                        <p>{error}</p>
+                        <small>{error}</small>
                     </div>)}
 
                     {!isLoading && !error && (
@@ -53,13 +53,13 @@ function UsuariosScreen() {
                                 <th>Permissões</th>
                             </thead>
                             <tbody>
-                                {usuarios.map(user => (
+                                {usuarios.map(user =>
                                     <tr key={user.id}>
                                         <td>{user.id}</td>
                                         <td>{user.email}</td>
                                         <td>{user.permissoes}</td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     )}
