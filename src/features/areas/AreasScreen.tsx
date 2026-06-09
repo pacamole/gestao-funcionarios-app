@@ -45,10 +45,12 @@ function AreasScreen() {
 
             {isLoading && (<p>Carregando áreas...</p>)}
 
-            {error && (<div style={{ backgroundColor: "salmon" }}>
-                <h5>Ocorreu um erro na aplicação...</h5>
-                <small>{error}</small>
-            </div>)}
+            {error && (
+                <div style={{ backgroundColor: "salmon" }}>
+                    <h5>Ocorreu um erro na aplicação...</h5>
+                    <small>{error}</small>
+                </div>
+            )}
 
             {!isLoading && !error && (
                 <div className='table-container'>

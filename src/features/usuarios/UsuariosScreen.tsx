@@ -33,17 +33,19 @@ function UsuariosScreen() {
     return (
         <div className="container">
             <header>
-                <h2>Usuários</h2>
+                <h2>Gerenciar Usuários</h2>
             </header>
 
             <main>
                 <div className="table-container">
                     {isLoading && (<p>Carregando usuários...</p>)}
 
-                    {error && (<div style={{backgroundColor: "salmon"}}>
-                        <h5>Ocorreu um erro na aplicação...</h5>
-                        <small>{error}</small>
-                    </div>)}
+                    {error && (
+                        <div style={{ backgroundColor: "salmon" }}>
+                            <h5>Ocorreu um erro na aplicação...</h5>
+                            <small>{error}</small>
+                        </div>
+                    )}
 
                     {!isLoading && !error && (
                         <table border={2}>
