@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../../api/apiClient';
+import { Funcionario } from '../funcionarios/FuncionariosScreen';
 
 export interface Area {
     id: string,
     nome: string,
     classificacao: string,
-    idResponsavel: string | null,
+    funcionarioResponsavel: Funcionario | null,
     idAreaPai: string | null
 }
 
@@ -56,11 +57,13 @@ function AreasScreen() {
                 <div className='table-container'>
                     <table>
                         <thead>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Classificação</th>
-                            <th>Area Pai</th>
-                            <th>Gerente da Área</th>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Classificação</th>
+                                <th>Area Pai</th>
+                                <th>Gerente da Área</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {areas.map(area =>
@@ -70,7 +73,7 @@ function AreasScreen() {
                                     <td>{area.nome}</td>
                                     <td>{area.classificacao}</td>
                                     <td>{getAreaPai(area.idAreaPai)}</td>
-                                    <td>{area.idResponsavel || "Nenhum responsável"}</td>
+                                    <td>{area.funcionarioResponsavel && "Nenhum responsável"}</td>
                                 </tr>
                             )}
                         </tbody>

@@ -1,6 +1,7 @@
 import UsuariosScreen from './features/usuarios/UsuariosScreen';
 import AreasScreen from './features/areas/AreasScreen';
 import CargosScreen from './features/cargos/CargosScreen';
+import FuncionariosScreen from './features/funcionarios/FuncionariosScreen';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <hr style={{ margin: '2rem 0' }} />
       <AreasScreen />
       <CargosScreen />
+      <FuncionariosScreen />
     </div>
   );
 }

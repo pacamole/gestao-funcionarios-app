@@ -48,11 +48,13 @@ function UsuariosScreen() {
                     )}
 
                     {!isLoading && !error && (
-                        <table border={2}>
+                        <table>
                             <thead>
-                                <th>ID</th>
-                                <th>E-mail</th>
-                                <th>Permissões</th>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>E-mail</th>
+                                    <th>Permissões</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 {usuarios.map(user =>
