@@ -10,7 +10,6 @@ export interface Area {
     idAreaPai: string | null;
 }
 
-// Interface auxiliar para os dados do formulário (envio para a API)
 interface AreaFormData {
     id?: string;
     nome: string;
@@ -34,9 +33,9 @@ function AreasScreen() {
         idAreaPai: ''
     });
 
-    // Função combinada para buscar Áreas e Funcionários em simultâneo
     async function fetchData() {
         setIsLoading(true);
+        setError(null);
         try {
             const [areasData, funcionariosData] = await Promise.all([
                 apiClient.get<Area[]>("/areas"),
@@ -44,8 +43,8 @@ function AreasScreen() {
             ]);
             setAreas(areasData);
             setFuncionarios(funcionariosData);
-        } catch (err) {
-            setError('Failed to fetch data.');
+        } catch (err: any) {
+            setError(err.message);
         } finally {
             setIsLoading(false);
         }
@@ -68,8 +67,8 @@ function AreasScreen() {
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
         
-        // Limpar strings vazias para enviar null ao backend caso não exista relação
         const payload = {
             ...formData,
             funcionarioResponsavelId: formData.funcionarioResponsavelId || null,
@@ -86,8 +85,8 @@ function AreasScreen() {
             setIsFormOpen(false);
             setFormData({ nome: '', classificacao: '', funcionarioResponsavelId: '', idAreaPai: '' });
             fetchData();
-        } catch (err) {
-            setError('Falha ao guardar a área.');
+        } catch (err: any) {
+            setError(err.message);
         }
     };
 
@@ -104,11 +103,12 @@ function AreasScreen() {
 
     const handleDelete = async (id: string) => {
         if (!window.confirm("Tem a certeza que deseja eliminar esta área?")) return;
+        setError(null);
         try {
             await apiClient.delete(`/areas/${id}`);
             fetchData();
-        } catch (err) {
-            setError('Falha ao eliminar a área.');
+        } catch (err: any) {
+            setError(err.message);
         }
     };
 
@@ -122,9 +122,19 @@ function AreasScreen() {
             </header>
 
             {error && (
-                <div style={{ backgroundColor: "salmon", padding: '10px', marginBottom: '15px' }}>
-                    <h5>Ocorreu um erro na aplicação...</h5>
-                    <small>{error}</small>
+                <div style={{ 
+                    backgroundColor: "#ffcccc", 
+                    border: "1px solid red", 
+                    padding: '15px', 
+                    color: '#900', 
+                    borderRadius: '5px', 
+                    marginBottom: '20px',
+                    overflowX: 'auto' 
+                }}>
+                    <h4 style={{ margin: '0 0 10px 0' }}>⚠️ Atenção:</h4>
+                    <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontFamily: 'monospace', fontSize: '13px', margin: 0 }}>
+                        {error}
+                    </pre>
                 </div>
             )}
 

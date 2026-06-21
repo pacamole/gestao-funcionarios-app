@@ -13,13 +13,12 @@ export interface Funcionario {
     usuario: Usuario | null;
 }
 
-// Interface auxiliar para o formulário
 interface FuncionarioFormData {
     id?: string;
     nome: string;
     modalidade: string;
     observacoes: string;
-    validadeContrato: string; // O input type="date" usa string
+    validadeContrato: string;
     IdCargo: string;
     IdUsuario: string;
 }
@@ -39,6 +38,7 @@ function FuncionariosScreen() {
 
     async function fetchData() {
         setIsLoading(true);
+        setError(null);
         try {
             const [funcionariosData, cargosData, usuariosData] = await Promise.all([
                 apiClient.get<Funcionario[]>("/funcionarios"),
@@ -46,7 +46,6 @@ function FuncionariosScreen() {
                 apiClient.get<Usuario[]>("/usuarios")
             ]);
             
-            // Tratamento do objeto de data para a tabela
             const formattedFuncionarios = funcionariosData.map(f => ({
                 ...f,
                 validadeContrato: new Date(f.validadeContrato)
@@ -55,8 +54,8 @@ function FuncionariosScreen() {
             setFuncionarios(formattedFuncionarios);
             setCargos(cargosData);
             setUsuarios(usuariosData);
-        } catch (error) {
-            setError("Failed to fetch data");
+        } catch (err: any) {
+            setError(err.message);
         } finally {
             setIsLoading(false);
         }
@@ -73,13 +72,12 @@ function FuncionariosScreen() {
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
         
-        // Formatar payload
         const payload = {
             ...formData,
             IdCargo: formData.IdCargo || null,
             IdUsuario: formData.IdUsuario || null,
-            // Certifique-se de que envia uma data ISO válida para a sua API C#
             validadeContrato: new Date(formData.validadeContrato).toISOString()
         };
 
@@ -93,13 +91,12 @@ function FuncionariosScreen() {
             setIsFormOpen(false);
             setFormData({ nome: '', modalidade: '', observacoes: '', validadeContrato: '', IdCargo: '', IdUsuario: '' });
             fetchData();
-        } catch (err) {
-            setError('Falha ao guardar o funcionário.');
+        } catch (err: any) {
+            setError(err.message);
         }
     };
 
     const handleEdit = (funcionario: Funcionario) => {
-        // Converter Date do javascript para YYYY-MM-DD
         const dateString = funcionario.validadeContrato.toISOString().split('T')[0];
         
         setFormData({
@@ -116,11 +113,12 @@ function FuncionariosScreen() {
 
     const handleDelete = async (id: string) => {
         if (!window.confirm("Tem a certeza que deseja eliminar este funcionário?")) return;
+        setError(null);
         try {
             await apiClient.delete(`/funcionarios/${id}`);
             fetchData();
-        } catch (err) {
-            setError('Falha ao eliminar o funcionário.');
+        } catch (err: any) {
+            setError(err.message);
         }
     };
 
@@ -134,9 +132,19 @@ function FuncionariosScreen() {
             </header>
 
             {error && (
-                <div style={{ backgroundColor: "salmon", padding: '10px', marginBottom: '15px' }}>
-                    <h5>Ocorreu um erro na aplicação...</h5>
-                    <small>{error}</small>
+                <div style={{ 
+                    backgroundColor: "#ffcccc", 
+                    border: "1px solid red", 
+                    padding: '15px', 
+                    color: '#900', 
+                    borderRadius: '5px', 
+                    marginBottom: '20px',
+                    overflowX: 'auto' 
+                }}>
+                    <h4 style={{ margin: '0 0 10px 0' }}>⚠️ Atenção:</h4>
+                    <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontFamily: 'monospace', fontSize: '13px', margin: 0 }}>
+                        {error}
+                    </pre>
                 </div>
             )}
 

@@ -9,12 +9,11 @@ export interface Cargo {
     area: Area | null;
 }
 
-// Interface auxiliar para os datos do formulario
 interface CargoFormData {
     id?: string;
     nome: string;
     salario: number | string;
-    idArea: string; // Chave foránea para o backend
+    idArea: string;
 }
 
 function CargosScreen() {
@@ -31,9 +30,9 @@ function CargosScreen() {
         idArea: ''
     });
 
-    // Buscar Cargos e Áreas simultaneamente
     async function fetchData() {
         setIsLoading(true);
+        setError(null);
         try {
             const [cargosData, areasData] = await Promise.all([
                 apiClient.get<Cargo[]>("/cargos"),
@@ -41,8 +40,8 @@ function CargosScreen() {
             ]);
             setCargos(cargosData);
             setAreas(areasData);
-        } catch (err) {
-            setError("Failed to fetch data");
+        } catch (err: any) {
+            setError(err.message);
         } finally {
             setIsLoading(false);
         }
@@ -59,12 +58,12 @@ function CargosScreen() {
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
         
-        // Formatar os datos para o backend
         const payload = {
             ...formData,
             idArea: formData.idArea !== '' ? formData.idArea : null,
-            salario: Number(formData.salario) // Asegurar que o salario se envía como número
+            salario: Number(formData.salario)
         };
 
         try {
@@ -77,8 +76,8 @@ function CargosScreen() {
             setIsFormOpen(false);
             setFormData({ nome: '', salario: '', idArea: '' });
             fetchData();
-        } catch (err) {
-            setError('Falha ao guardar o cargo.');
+        } catch (err: any) {
+            setError(err.message);
         }
     };
 
@@ -94,11 +93,12 @@ function CargosScreen() {
 
     const handleDelete = async (id: string) => {
         if (!window.confirm("Tem a certeza que deseja eliminar este cargo?")) return;
+        setError(null);
         try {
             await apiClient.delete(`/cargos/${id}`);
             fetchData();
-        } catch (err) {
-            setError('Falha ao eliminar o cargo.');
+        } catch (err: any) {
+            setError(err.message);
         }
     };
 
@@ -112,9 +112,19 @@ function CargosScreen() {
             </header>
             
             {error && (
-                <div style={{ backgroundColor: "salmon", padding: '10px', marginBottom: '15px' }}>
-                    <h5>Ocorreu um erro na aplicação...</h5>
-                    <small>{error}</small>
+                <div style={{ 
+                    backgroundColor: "#ffcccc", 
+                    border: "1px solid red", 
+                    padding: '15px', 
+                    color: '#900', 
+                    borderRadius: '5px', 
+                    marginBottom: '20px',
+                    overflowX: 'auto' 
+                }}>
+                    <h4 style={{ margin: '0 0 10px 0' }}>⚠️ Atenção:</h4>
+                    <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontFamily: 'monospace', fontSize: '13px', margin: 0 }}>
+                        {error}
+                    </pre>
                 </div>
             )}
 

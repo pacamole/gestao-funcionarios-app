@@ -19,11 +19,12 @@ function UsuariosScreen() {
 
     async function fetchUsuarios() {
         setIsLoading(true);
+        setError(null);
         try {
             const data = await apiClient.get<Usuario[]>('/usuarios');
             setUsuarios(data);
-        } catch (err) {
-            setError('Failed to fetch users.');
+        } catch (err: any) {
+            setError(err.message);
         } finally {
             setIsLoading(false);
         }
@@ -33,47 +34,42 @@ function UsuariosScreen() {
         fetchUsuarios();
     }, []);
 
-    // Função para lidar com inputs do formulário
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    // Função para Guardar (Criar ou Atualizar)
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
         try {
             if (formData.id) {
-                // Atualizar (PUT)
                 await apiClient.put<Partial<Usuario>, Usuario>(`/usuarios/${formData.id}`, formData);
             } else {
-                // Criar (POST) - Removemos o ID caso exista para a API gerar um novo
                 const { id, ...newUsuario } = formData;
                 await apiClient.post<Omit<Partial<Usuario>, 'id'>, Usuario>('/usuarios', newUsuario);
             }
             setIsFormOpen(false);
-            setFormData({ email: '', permissoes: '' }); // Limpa o form
-            fetchUsuarios(); // Atualiza a lista
-        } catch (err) {
-            setError('Falha ao guardar o utilizador.');
+            setFormData({ email: '', permissoes: '' });
+            fetchUsuarios();
+        } catch (err: any) {
+            setError(`Falha ao guardar o utilizador:\n${err.message}`);
         }
     };
 
-    // Função para Editar (Preenche o formulário)
     const handleEdit = (usuario: Usuario) => {
         setFormData(usuario);
         setIsFormOpen(true);
     };
 
-    // Função para Eliminar (DELETE)
     const handleDelete = async (id: string) => {
         if (!window.confirm("Tem a certeza que deseja eliminar este utilizador?")) return;
-        
+        setError(null);
         try {
             await apiClient.delete(`/usuarios/${id}`);
-            fetchUsuarios(); // Atualiza a lista após apagar
-        } catch (err) {
-            setError('Falha ao eliminar o utilizador.');
+            fetchUsuarios();
+        } catch (err: any) {
+            setError(`Falha ao eliminar o utilizador:\n${err.message}`);
         }
     };
 
@@ -120,10 +116,21 @@ function UsuariosScreen() {
                 <div className="table-container">
                     {isLoading && (<p>Carregando usuários...</p>)}
 
+                    {/* Exibição Detalhada do Erro */}
                     {error && (
-                        <div style={{ backgroundColor: "salmon", padding: '10px' }}>
-                            <h5>Ocorreu um erro na aplicação...</h5>
-                            <small>{error}</small>
+                        <div style={{ 
+                            backgroundColor: "#ffcccc", 
+                            border: "1px solid red", 
+                            padding: '15px', 
+                            color: '#900', 
+                            borderRadius: '5px', 
+                            marginBottom: '20px',
+                            overflowX: 'auto' 
+                        }}>
+                            <h4 style={{ margin: '0 0 10px 0' }}>⚠️ Ocorreu um erro:</h4>
+                            <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontFamily: 'monospace', fontSize: '13px', margin: 0 }}>
+                                {error}
+                            </pre>
                         </div>
                     )}
 
