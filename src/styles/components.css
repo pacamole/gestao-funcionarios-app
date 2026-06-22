@@ -1,0 +1,203 @@
+/* ========== HEADER ENHANCEMENTS ========== */
+header {
+    gap: 1rem;
+}
+
+header h2 {
+    flex: 1;
+}
+
+/* ========== BUTTON ENHANCEMENTS ========== */
+button {
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ========== FORM ENHANCEMENTS ========== */
+.form-group input[type="date"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group input[type="text"],
+.form-group select,
+.form-group textarea {
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+}
+
+.form-group input[type="date"]:hover,
+.form-group input[type="email"]:hover,
+.form-group input[type="number"]:hover,
+.form-group input[type="text"]:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+    background-color: #fff;
+    border-color: #d1d5db;
+}
+
+.form-group input:invalid:not(:placeholder-shown),
+.form-group select:invalid:not(:placeholder-shown),
+.form-group textarea:invalid:not(:placeholder-shown) {
+    border-color: #ef4444;
+    background-color: #fee2e2;
+}
+
+/* ========== TABLE ENHANCEMENTS ========== */
+table {
+    font-size: 14px;
+}
+
+td {
+    vertical-align: middle;
+}
+
+/* Alternating row colors for better readability */
+tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+tbody tr:hover {
+    background-color: #eff6ff;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    header h2 {
+        margin-bottom: 0;
+    }
+
+    header button {
+        width: 100%;
+    }
+
+    .table-container {
+        padding: 0.5rem;
+        overflow-x: auto;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px 10px;
+    }
+
+    .form-container {
+        padding: 15px;
+    }
+
+    td button {
+        padding: 4px 8px;
+        font-size: 11px;
+        margin-bottom: 4px;
+        display: block;
+        width: 100%;
+        margin-right: 0;
+    }
+
+    td button:first-of-type {
+        margin-bottom: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.75rem;
+    }
+
+    table {
+        font-size: 11px;
+    }
+
+    th, td {
+        padding: 6px 8px;
+    }
+
+    header h2 {
+        font-size: 18px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+    }
+
+    button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-container {
+    animation: slideIn 0.3s ease;
+}
+
+.error-message {
+    animation: slideIn 0.3s ease;
+}
+
+/* ========== ACCESSIBILITY ========== */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* ========== UTILITY CLASSES ========== */
+.text-muted {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.text-danger {
+    color: #ef4444;
+}
+
+.text-success {
+    color: #10b981;
+}
+
+.mt-small {
+    margin-top: 0.5rem;
+}
+
+.mt-medium {
+    margin-top: 1rem;
+}
+
+.mt-large {
+    margin-top: 1.5rem;
+}

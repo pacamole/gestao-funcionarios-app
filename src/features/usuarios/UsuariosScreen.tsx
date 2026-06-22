@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../../api/apiClient';
-import './UsuariosScreen.css';
 
 export interface Usuario {
     id: string;
@@ -85,10 +84,10 @@ function UsuariosScreen() {
             <main>
                 {/* Formulário de Criação / Edição */}
                 {isFormOpen && (
-                    <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc' }}>
+                    <div className="form-container">
                         <h3>{formData.id ? 'Editar Usuário' : 'Novo Usuário'}</h3>
                         <form onSubmit={handleSave}>
-                            <div style={{ marginBottom: '10px' }}>
+                            <div className="form-group">
                                 <label>E-mail: </label>
                                 <input 
                                     type="email" 
@@ -98,7 +97,7 @@ function UsuariosScreen() {
                                     required 
                                 />
                             </div>
-                            <div style={{ marginBottom: '10px' }}>
+                            <div className="form-group">
                                 <label>Permissões: </label>
                                 <input 
                                     type="text" 
@@ -108,29 +107,21 @@ function UsuariosScreen() {
                                     required 
                                 />
                             </div>
-                            <button type="submit">Guardar</button>
+                            <div className="form-actions">
+                                <button type="submit">Guardar</button>
+                            </div>
                         </form>
                     </div>
                 )}
 
                 <div className="table-container">
-                    {isLoading && (<p>Carregando usuários...</p>)}
+                    {isLoading && (<p className="loading">Carregando usuários</p>)}
 
                     {/* Exibição Detalhada do Erro */}
                     {error && (
-                        <div style={{ 
-                            backgroundColor: "#ffcccc", 
-                            border: "1px solid red", 
-                            padding: '15px', 
-                            color: '#900', 
-                            borderRadius: '5px', 
-                            marginBottom: '20px',
-                            overflowX: 'auto' 
-                        }}>
-                            <h4 style={{ margin: '0 0 10px 0' }}>⚠️ Ocorreu um erro:</h4>
-                            <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontFamily: 'monospace', fontSize: '13px', margin: 0 }}>
-                                {error}
-                            </pre>
+                        <div className="error-message">
+                            <h4>⚠️ Ocorreu um erro:</h4>
+                            <pre>{error}</pre>
                         </div>
                     )}
 
@@ -151,7 +142,7 @@ function UsuariosScreen() {
                                         <td>{user.email}</td>
                                         <td>{user.permissoes}</td>
                                         <td>
-                                            <button onClick={() => handleEdit(user)} style={{ marginRight: '5px' }}>Editar</button>
+                                            <button onClick={() => handleEdit(user)}>Editar</button>
                                             <button onClick={() => handleDelete(user.id)}>Excluir</button>
                                         </td>
                                     </tr>

@@ -112,31 +112,21 @@ function CargosScreen() {
             </header>
             
             {error && (
-                <div style={{ 
-                    backgroundColor: "#ffcccc", 
-                    border: "1px solid red", 
-                    padding: '15px', 
-                    color: '#900', 
-                    borderRadius: '5px', 
-                    marginBottom: '20px',
-                    overflowX: 'auto' 
-                }}>
-                    <h4 style={{ margin: '0 0 10px 0' }}>⚠️ Atenção:</h4>
-                    <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontFamily: 'monospace', fontSize: '13px', margin: 0 }}>
-                        {error}
-                    </pre>
+                <div className="error-message">
+                    <h4>⚠️ Atenção:</h4>
+                    <pre>{error}</pre>
                 </div>
             )}
 
             {isFormOpen && (
-                <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc' }}>
+                <div className="form-container">
                     <h3>{formData.id ? 'Editar Cargo' : 'Novo Cargo'}</h3>
-                    <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <div>
+                    <form onSubmit={handleSave}>
+                        <div className="form-group">
                             <label>Nome: </label>
                             <input type="text" name="nome" value={formData.nome} onChange={handleInputChange} required />
                         </div>
-                        <div>
+                        <div className="form-group">
                             <label>Salário: </label>
                             <input 
                                 type="number" 
@@ -148,7 +138,7 @@ function CargosScreen() {
                                 required 
                             />
                         </div>
-                        <div>
+                        <div className="form-group">
                             <label>Área: </label>
                             <select name="idArea" value={formData.idArea} onChange={handleInputChange}>
                                 <option value="">Nenhuma</option>
@@ -157,13 +147,15 @@ function CargosScreen() {
                                 ))}
                             </select>
                         </div>
-                        <button type="submit" style={{ alignSelf: 'flex-start' }}>Guardar</button>
+                        <div className="form-actions">
+                            <button type="submit">Guardar</button>
+                        </div>
                     </form>
                 </div>
             )}
 
             <main>
-                {isLoading ? (<p>Carregando cargos...</p>) : (
+                {isLoading ? (<p className="loading">Carregando cargos</p>) : (
                     <div className='table-container'>
                         <table>
                             <thead>
@@ -183,7 +175,7 @@ function CargosScreen() {
                                         <td>R$ {cargo.salario}</td>
                                         <td>{cargo.area?.nome || "N/A"}</td>
                                         <td>
-                                            <button onClick={() => handleEdit(cargo)} style={{ marginRight: '5px' }}>Editar</button>
+                                            <button onClick={() => handleEdit(cargo)}>Editar</button>
                                             <button onClick={() => handleDelete(cargo.id)}>Excluir</button>
                                         </td>
                                     </tr>

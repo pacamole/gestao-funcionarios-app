@@ -14,7 +14,7 @@ interface AreaFormData {
     id?: string;
     nome: string;
     classificacao: string;
-    funcionarioResponsavelId: string;
+    idFuncionarioResponsavel: string;
     idAreaPai: string;
 }
 
@@ -29,7 +29,7 @@ function AreasScreen() {
     const [formData, setFormData] = useState<AreaFormData>({
         nome: '',
         classificacao: '',
-        funcionarioResponsavelId: '',
+        idFuncionarioResponsavel: '',
         idAreaPai: ''
     });
 
@@ -71,7 +71,7 @@ function AreasScreen() {
         
         const payload = {
             ...formData,
-            funcionarioResponsavelId: formData.funcionarioResponsavelId || null,
+            idFuncionarioResponsavel: formData.idFuncionarioResponsavel || null,
             idAreaPai: formData.idAreaPai || null
         };
 
@@ -83,7 +83,7 @@ function AreasScreen() {
                 await apiClient.post('/areas', newArea);
             }
             setIsFormOpen(false);
-            setFormData({ nome: '', classificacao: '', funcionarioResponsavelId: '', idAreaPai: '' });
+            setFormData({ nome: '', classificacao: '', idFuncionarioResponsavel: '', idAreaPai: '' });
             fetchData();
         } catch (err: any) {
             setError(err.message);
@@ -95,7 +95,7 @@ function AreasScreen() {
             id: area.id,
             nome: area.nome,
             classificacao: area.classificacao,
-            funcionarioResponsavelId: area.funcionarioResponsavel?.id || '',
+            idFuncionarioResponsavel: area.funcionarioResponsavel?.id || '',
             idAreaPai: area.idAreaPai || ''
         });
         setIsFormOpen(true);
@@ -116,41 +116,31 @@ function AreasScreen() {
         <div className='container'>
             <header>
                 <h2>Gerenciar Áreas</h2>
-                <button onClick={() => { setIsFormOpen(!isFormOpen); setFormData({ nome: '', classificacao: '', funcionarioResponsavelId: '', idAreaPai: '' }); }}>
+                <button onClick={() => { setIsFormOpen(!isFormOpen); setFormData({ nome: '', classificacao: '', idFuncionarioResponsavel: '', idAreaPai: '' }); }}>
                     {isFormOpen ? 'Cancelar' : 'Adicionar Nova Área'}
                 </button>
             </header>
 
             {error && (
-                <div style={{ 
-                    backgroundColor: "#ffcccc", 
-                    border: "1px solid red", 
-                    padding: '15px', 
-                    color: '#900', 
-                    borderRadius: '5px', 
-                    marginBottom: '20px',
-                    overflowX: 'auto' 
-                }}>
-                    <h4 style={{ margin: '0 0 10px 0' }}>⚠️ Atenção:</h4>
-                    <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontFamily: 'monospace', fontSize: '13px', margin: 0 }}>
-                        {error}
-                    </pre>
+                <div className="error-message">
+                    <h4>⚠️ Atenção:</h4>
+                    <pre>{error}</pre>
                 </div>
             )}
 
             {isFormOpen && (
-                <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc' }}>
+                <div className="form-container">
                     <h3>{formData.id ? 'Editar Área' : 'Nova Área'}</h3>
-                    <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <div>
+                    <form onSubmit={handleSave}>
+                        <div className="form-group">
                             <label>Nome: </label>
                             <input type="text" name="nome" value={formData.nome} onChange={handleInputChange} required />
                         </div>
-                        <div>
+                        <div className="form-group">
                             <label>Classificação: </label>
                             <input type="text" name="classificacao" value={formData.classificacao} onChange={handleInputChange} required />
                         </div>
-                        <div>
+                        <div className="form-group">
                             <label>Área Pai: </label>
                             <select name="idAreaPai" value={formData.idAreaPai} onChange={handleInputChange}>
                                 <option value="">Nenhuma</option>
@@ -159,22 +149,24 @@ function AreasScreen() {
                                 ))}
                             </select>
                         </div>
-                        <div>
+                        <div className="form-group">
                             <label>Gerente da Área: </label>
-                            <select name="funcionarioResponsavelId" value={formData.funcionarioResponsavelId} onChange={handleInputChange}>
+                            <select name="idFuncionarioResponsavel" value={formData.idFuncionarioResponsavel} onChange={handleInputChange}>
                                 <option value="">Nenhum</option>
                                 {funcionarios.map(func => (
                                     <option key={func.id} value={func.id}>{func.nome}</option>
                                 ))}
                             </select>
                         </div>
-                        <button type="submit" style={{ alignSelf: 'flex-start' }}>Guardar</button>
+                        <div className="form-actions">
+                            <button type="submit">Guardar</button>
+                        </div>
                     </form>
                 </div>
             )}
 
             <main>
-                {isLoading ? (<p>Carregando dados...</p>) : (
+                {isLoading ? (<p className="loading">Carregando dados</p>) : (
                     <div className='table-container'>
                         <table>
                             <thead>
@@ -196,7 +188,7 @@ function AreasScreen() {
                                         <td>{getAreaPai(area.idAreaPai)}</td>
                                         <td>{area.funcionarioResponsavel?.nome || "Nenhum responsável"}</td>
                                         <td>
-                                            <button onClick={() => handleEdit(area)} style={{ marginRight: '5px' }}>Editar</button>
+                                            <button onClick={() => handleEdit(area)}>Editar</button>
                                             <button onClick={() => handleDelete(area.id)}>Excluir</button>
                                         </td>
                                     </tr>

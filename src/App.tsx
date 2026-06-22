@@ -5,6 +5,7 @@ import FuncionariosScreen from './features/funcionarios/FuncionariosScreen';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
 import "./index.css";
+import "./styles/components.css";
 
 function App() {
   return (

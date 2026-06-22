@@ -132,43 +132,33 @@ function FuncionariosScreen() {
             </header>
 
             {error && (
-                <div style={{ 
-                    backgroundColor: "#ffcccc", 
-                    border: "1px solid red", 
-                    padding: '15px', 
-                    color: '#900', 
-                    borderRadius: '5px', 
-                    marginBottom: '20px',
-                    overflowX: 'auto' 
-                }}>
-                    <h4 style={{ margin: '0 0 10px 0' }}>⚠️ Atenção:</h4>
-                    <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', fontFamily: 'monospace', fontSize: '13px', margin: 0 }}>
-                        {error}
-                    </pre>
+                <div className="error-message">
+                    <h4>⚠️ Atenção:</h4>
+                    <pre>{error}</pre>
                 </div>
             )}
 
             {isFormOpen && (
-                <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc' }}>
+                <div className="form-container">
                     <h3>{formData.id ? 'Editar Funcionário' : 'Novo Funcionário'}</h3>
-                    <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <div>
+                    <form onSubmit={handleSave}>
+                        <div className="form-group">
                             <label>Nome: </label>
                             <input type="text" name="nome" value={formData.nome} onChange={handleInputChange} required />
                         </div>
-                        <div>
+                        <div className="form-group">
                             <label>Modalidade: </label>
                             <input type="text" name="modalidade" value={formData.modalidade} onChange={handleInputChange} required />
                         </div>
-                        <div>
+                        <div className="form-group">
                             <label>Observações: </label>
-                            <textarea name="observacoes" value={formData.observacoes} onChange={handleInputChange} rows={3} style={{ width: "100%" }} />
+                            <textarea name="observacoes" value={formData.observacoes} onChange={handleInputChange} rows={3} />
                         </div>
-                        <div>
+                        <div className="form-group">
                             <label>Validade do Contrato: </label>
                             <input type="date" name="validadeContrato" value={formData.validadeContrato} onChange={handleInputChange} required />
                         </div>
-                        <div>
+                        <div className="form-group">
                             <label>Cargo: </label>
                             <select name="IdCargo" value={formData.IdCargo} onChange={handleInputChange}>
                                 <option value="">Nenhum</option>
@@ -177,7 +167,7 @@ function FuncionariosScreen() {
                                 ))}
                             </select>
                         </div>
-                        <div>
+                        <div className="form-group">
                             <label>Utilizador Vinculado: </label>
                             <select name="IdUsuario" value={formData.IdUsuario} onChange={handleInputChange}>
                                 <option value="">Nenhum</option>
@@ -186,13 +176,15 @@ function FuncionariosScreen() {
                                 ))}
                             </select>
                         </div>
-                        <button type="submit" style={{ alignSelf: 'flex-start' }}>Guardar</button>
+                        <div className="form-actions">
+                            <button type="submit">Guardar</button>
+                        </div>
                     </form>
                 </div>
             )}
 
             <main>
-                {isLoading ? (<p>Carregando dados...</p>) : (
+                {isLoading ? (<p className="loading">Carregando dados</p>) : (
                     <div className='table-container'>
                         <table>
                             <thead>
@@ -218,7 +210,7 @@ function FuncionariosScreen() {
                                         <td>{funcionario.cargo?.nome ?? "N/A"}</td>
                                         <td>{funcionario.usuario?.email ?? "N/A"}</td>
                                         <td>
-                                            <button onClick={() => handleEdit(funcionario)} style={{ marginRight: '5px' }}>Editar</button>
+                                            <button onClick={() => handleEdit(funcionario)}>Editar</button>
                                             <button onClick={() => handleDelete(funcionario.id)}>Excluir</button>
                                         </td>
                                     </tr>
