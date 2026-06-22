@@ -31,7 +31,7 @@ Construído com uma arquitetura moderna, o sistema utiliza React e TypeScript no
 * 🏢 **Gestão Departamental (Áreas):** Mapeamento da estrutura da empresa, incluindo o cruzamento de dados para identificar áreas hierarquicamente superiores (Áreas Pai) e seus respectivos responsáveis.
 * 💼 **Gestão de Cargos:** Controle de posições corporativas, salários base e vinculação estrita direta a áreas específicas.
 * 👨‍💼 **Gestão de Funcionários:** Painel centralizado que consolida as contratações (CLT/PJ), controle de validade de contratos e relacionamento dinâmico com Cargos e Usuários.
-* 🔄 **[EM DESENVOLVIMENTO] Operações de Mutação (CRUD):** Inserção, edição e remoção de dados das entidades através de formulários interativos.
+* 🔄 **Operações de Mutação (CRUD):** Inserção, edição e remoção de dados das entidades através de formulários interativos.
 
 ---
 
@@ -47,7 +47,7 @@ Construído com uma arquitetura moderna, o sistema utiliza React e TypeScript no
 ## 🔗 Repositório e Apresentação
 * **Front-end:** [https://github.com/pacamole/gestao-funcionarios-app](https://github.com/pacamole/gestao-funcionarios-app)
 * **Back-end / API:** [https://github.com/pacamole/gestao-funcionarios](https://github.com/pacamole/gestao-funcionarios)
-* **Vídeo de Apresentação:** [Cole o link do YouTube/Drive aqui quando gravarem]
+* **Vídeo de Apresentação:** [Link do vídeo no drive](https://drive.google.com/file/d/1e-jQPaLN6hlbFPXoGQPVOTBAzelUL5r7/view?usp=drive_link)
 
 ---
 
@@ -82,7 +82,13 @@ cd API
 dotnet restore
 ```
 
-Execute a aplicação (o banco de dados SQLite será inicializado)
+**Crie e atualize o banco de dados SQLite (aplicando as migrações do Entity Framework)**
+
+```bash
+dotnet ef database update
+```
+
+**Execute a aplicação (o banco de dados SQLite será inicializado)**
 ```bash
 dotnet run
 ```
